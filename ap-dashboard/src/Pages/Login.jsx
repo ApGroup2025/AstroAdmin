@@ -19,10 +19,10 @@ export default function Login() {
       const data = await loginAdmin(email, password);
   
       if (data?.token) {
-        // Save only admin token
+     
         localStorage.setItem("auth", data.token);
   
-        // Redirect to dashboard
+      
         navigate("/");
       } else {
         throw new Error("Login failed: No token received");

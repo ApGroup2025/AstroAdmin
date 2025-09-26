@@ -1,65 +1,120 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { MdDashboard, MdPerson, MdCategory, MdAttachMoney, MdInventory, MdLogout } from "react-icons/md";
-import { GiCrystalBall } from "react-icons/gi"; 
-import logo from "../assets/logo.webp"; 
+import { NavLink, useNavigate, Outlet } from "react-router-dom";
+import {
+  MdDashboard, MdPerson, MdImage, MdLogout, MdVerified,
+  MdApproval, MdCategory, MdAttachMoney, MdInventory, MdArticle,MdCreate
+} from "react-icons/md";
+import { GiCrystalBall } from "react-icons/gi";
+import logo from "../assets/logo.webp";
+import { FaBell, FaRupeeSign } from "react-icons/fa";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: <MdDashboard /> },
   { path: "/users", label: "Users", icon: <MdPerson /> },
   { path: "/astrologers", label: "Astrologers", icon: <GiCrystalBall /> },
-  { path: "/categories", label: "Categories", icon: <MdCategory /> },
+{ path: "/blog-create", label: "Blog Create", icon: <MdCreate /> },
+
   { path: "/revenue", label: "Revenue", icon: <MdAttachMoney /> },
+  { path: "/blog", label: "Blogs", icon: <MdArticle /> },
   { path: "/products", label: "Products", icon: <MdInventory /> },
+  { path: "/pooja-listing", label: "Pooja-Listing", icon: <FaBell /> },
+  { path: "/price-management", label: "Price Management", icon: <FaRupeeSign /> },
+  { path: "/astrologer-status", label: "Astrologer Status", icon: <MdVerified /> },
+  { path: "/verification-request", label: "Verification Request", icon: <MdApproval /> },
+  { path: "/banner-listing", label: "Banner Listing", icon: <MdImage /> },
 ];
 
-export default function Sidebar() {
+// Sidebar Component
+function Sidebar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("auth"); // clear admin token
-    navigate("/login"); // redirect to login page
+    localStorage.removeItem("auth");
+    navigate("/login");
   };
 
   return (
-    <aside className="w-64 bg-amber-100 h-screen p-4 flex flex-col shadow-lg">
-      {/* Header Section */}
-      <h1 className="text-xl font-bold text-gray-800">Astro Admin</h1>
+    <aside className="fixed top-0 left-0 w-64 h-screen bg-amber-100 flex flex-col shadow-lg z-50 overflow-y-auto
+      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       
-      {/* Logo below the title */}
-      <div className="my-4">
-        <img src={logo} alt="Astro Admin Logo" className="w-[200px] h-[200px] object-contain mx-auto" />
+      {/* Header */}
+      <div className="p-4">
+        <h1 className="text-xl font-bold text-gray-800">Astro Admin</h1>
+      </div>
+
+      {/* Logo */}
+      <div className="px-4 mb-4">
+        <img src={logo} alt="Astro Admin Logo" className="w-[150px] h-[150px] object-contain mx-auto" />
       </div>
 
       {/* Menu */}
-      <nav className="flex-1">
-        <ul className="space-y-3 text-gray-700 font-medium">
+      <nav className="flex-1 px-2">
+        <ul className="space-y-2 text-gray-700 font-medium">
           {navItems.map((item) => (
             <li key={item.path}>
               <NavLink
                 to={item.path}
                 end
                 className={({ isActive }) =>
-                  `flex items-center space-x-2 p-2 rounded ${
-                    isActive ? "bg-emerald-700 font-bold text-white" : "hover:bg-yellow-200"
+                  `flex items-center space-x-3 p-3 mx-2 rounded-lg transition-colors duration-200 ${
+                    isActive 
+                      ? "bg-emerald-700 font-bold text-white shadow-md" 
+                      : "hover:bg-yellow-200 hover:shadow-sm"
                   }`
                 }
               >
                 <span className="text-lg">{item.icon}</span>
-                <span>{item.label}</span>
+                <span className="truncate">{item.label}</span>
               </NavLink>
             </li>
           ))}
         </ul>
       </nav>
 
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="flex items-center space-x-2 mt-6 p-2 rounded bg-red-500 text-white hover:bg-red-600 transition"
-      >
-        <MdLogout className="text-lg" />
-        <span>Logout</span>
-      </button>
+      {/* Logout */}
+      <div className="p-4">
+        <button
+          onClick={handleLogout}
+          className="flex items-center justify-center space-x-2 w-full p-3 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors duration-200 shadow-md"
+        >
+          <MdLogout className="text-lg" />
+          <span>Logout</span>
+        </button>
+      </div>
     </aside>
+  );
+}
+
+// Main Layout Component
+export default function MainLayout() {
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <Sidebar />
+      
+      {/* Main Content Area */}
+      <main className="flex-1 ml-64 overflow-auto">
+        <div className="p-6">
+         
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// Alternative: If you want to keep them separate, here's just the layout wrapper
+export function LayoutWrapper() {
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Your existing Sidebar component */}
+      <Sidebar />
+      
+      {/* Main Content with proper offset */}
+      <main className="flex-1 ml-64 overflow-auto">
+        <div className="p-6">
+          {/* This is where your blog/other content will render */}
+      
+        </div>
+      </main>
+    </div>
   );
 }

@@ -3,7 +3,7 @@ import { FaBell, FaSearch } from "react-icons/fa";
 export default function Topbar() {
   return (
     <header className="flex items-center justify-between bg-white p-4 shadow rounded-xl">
-      {/* Search Bar */}
+
       <div className="flex items-center bg-gray-100 rounded px-3 py-2 w-1/3">
         <FaSearch className="text-gray-500 mr-2" />
         <input
@@ -13,7 +13,7 @@ export default function Topbar() {
         />
       </div>
 
-      {/* Profile + Notification */}
+
       <div className="flex items-center space-x-4">
         <FaBell className="text-gray-600 cursor-pointer" />
         <div className="flex items-center space-x-2">
