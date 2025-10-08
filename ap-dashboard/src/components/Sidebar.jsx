@@ -1,9 +1,9 @@
 import { NavLink, useNavigate, Outlet } from "react-router-dom";
 import {
   MdDashboard, MdPerson, MdImage, MdLogout, MdVerified,
-  MdApproval, MdCategory, MdAttachMoney, MdInventory, MdArticle,MdCreate
+  MdApproval, MdAttachMoney, MdInventory, MdArticle,MdCreate,MdCloudUpload,MdNotifications,MdConfirmationNumber,MdChecklist
 } from "react-icons/md";
-import { GiCrystalBall } from "react-icons/gi";
+import { GiCrystalBall ,GiPrayer} from "react-icons/gi";
 import logo from "../assets/logo.webp";
 import { FaBell, FaRupeeSign } from "react-icons/fa";
 
@@ -17,13 +17,23 @@ const navItems = [
   { path: "/blog", label: "Blogs", icon: <MdArticle /> },
   { path: "/products", label: "Products", icon: <MdInventory /> },
   { path: "/pooja-listing", label: "Pooja-Listing", icon: <FaBell /> },
+{ path: "/pooja-form", label: "Pooja Form", icon: <GiPrayer /> },
+
   { path: "/price-management", label: "Price Management", icon: <FaRupeeSign /> },
   { path: "/astrologer-status", label: "Astrologer Status", icon: <MdVerified /> },
   { path: "/verification-request", label: "Verification Request", icon: <MdApproval /> },
   { path: "/banner-listing", label: "Banner Listing", icon: <MdImage /> },
+ { path: "/upload-banner", label: "Banner Upload", icon: <MdCloudUpload /> },
+{ path: "/notice", label: "Notice", icon: <MdNotifications /> },
+{ path: "/notice-create", label: "Notice-Create", icon: <MdNotifications /> },
+{ path: "/admin-tickets", label: "Admin-Tickets", icon: <MdConfirmationNumber /> },
+{ path: "/notification", label: "Notification", icon: <MdNotifications /> },
+
+
+   
 ];
 
-// Sidebar Component
+
 function Sidebar() {
   const navigate = useNavigate();
 
@@ -36,17 +46,17 @@ function Sidebar() {
     <aside className="fixed top-0 left-0 w-64 h-screen bg-amber-100 flex flex-col shadow-lg z-50 overflow-y-auto
       [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       
-      {/* Header */}
+     
       <div className="p-4">
         <h1 className="text-xl font-bold text-gray-800">Astro Admin</h1>
       </div>
 
-      {/* Logo */}
+   
       <div className="px-4 mb-4">
         <img src={logo} alt="Astro Admin Logo" className="w-[150px] h-[150px] object-contain mx-auto" />
       </div>
 
-      {/* Menu */}
+ 
       <nav className="flex-1 px-2">
         <ul className="space-y-2 text-gray-700 font-medium">
           {navItems.map((item) => (
@@ -70,7 +80,7 @@ function Sidebar() {
         </ul>
       </nav>
 
-      {/* Logout */}
+   
       <div className="p-4">
         <button
           onClick={handleLogout}
@@ -84,15 +94,15 @@ function Sidebar() {
   );
 }
 
-// Main Layout Component
+
 export default function MainLayout() {
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
+    
       <Sidebar />
       
-      {/* Main Content Area */}
-      <main className="flex-1 ml-64 overflow-auto">
+ 
+      <main className="flex-1 ml-64 overflow-auto" style={{ marginLeft: '13rem' }}>
         <div className="p-6">
          
         </div>
@@ -101,17 +111,17 @@ export default function MainLayout() {
   );
 }
 
-// Alternative: If you want to keep them separate, here's just the layout wrapper
+
 export function LayoutWrapper() {
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Your existing Sidebar component */}
+    
       <Sidebar />
       
-      {/* Main Content with proper offset */}
-      <main className="flex-1 ml-64 overflow-auto">
+  
+      <main className="flex-1 ml-64 overflow-auto" style={{ marginLeft: '13rem' }}>
         <div className="p-6">
-          {/* This is where your blog/other content will render */}
+   
       
         </div>
       </main>

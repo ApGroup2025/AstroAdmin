@@ -20,6 +20,11 @@ import BlogList from "./Pages/BlogList";
 import ApproveVerification from "./components/ApproveVerification";
 import KYCAction from "./components/KYCAction";
 import BlogCreate from "./Pages/BlogCreate";
+import NoticePage from "./Pages/Notice";
+import Notice from "./Pages/Notice";
+import NoticeCreate from "./Pages/NoticeCreate";
+import AdminTickets from "./Pages/AdminTickets";
+import Notification from "./Pages/Notification";
 
 function PrivateRoute({ children }) {
   const auth = localStorage.getItem("auth");
@@ -62,18 +67,23 @@ export default function App() {
         <Route path="categories" element={<Categories />} />
         <Route path="revenue" element={<Revenue />} />
         <Route path="products" element={<Products />} />
-               <Route path="pooja-listing" element={<PoojaListing />} />
-                 <Route path="price-management" element={<PriceManagement />} />
-                 <Route path="astrologer-status" element={<AstrologerStatus />} />
-                  <Route path="verification-request" element={<VerificationRequest />} />
-                          <Route path="banner-listing" element={<BannerListing />} />
-                                   <Route path="upload-banner" element={<UploadBanner />} />
-                                      <Route path="upload-videos" element={<UploadVideos />} />
-                                                <Route path="pooja-form" element={<PoojaForm />} />
-                                                  <Route path="blog" element={<BlogList />} />
-                                                   <Route path="approve-verification" element={<ApproveVerification />} />
-                                                       <Route path="kyc-action" element={<KYCAction />} />
-                                                                             <Route path="blog-create" element={<BlogCreate />} />
+        <Route path="pooja-listing" element={<PoojaListing />} />
+        <Route path="price-management" element={<PriceManagement />} />
+        <Route path="astrologer-status" element={<AstrologerStatus />} />
+        <Route path="verification-request" element={<VerificationRequest />} />
+        <Route path="banner-listing" element={<BannerListing />} />
+        <Route path="upload-banner" element={<UploadBanner />} />
+        <Route path="upload-videos" element={<UploadVideos />} />
+        <Route path="pooja-form" element={<PoojaForm />} />
+        <Route path="blog" element={<BlogList />} />
+        <Route path="approve-verification" element={<ApproveVerification />} />
+  
+       <Route path="blog-create" element={<BlogCreate />} />
+      <Route path="notice" element={<Notice />} />
+      <Route path="notice-create" element={<NoticeCreate />} />
+      <Route path="admin-tickets" element={<AdminTickets />} />
+      <Route path="notification" element={<Notification />} />
+       <Route path="Kyc" element={<KYCAction />} />
       </Route>
     </Routes>
   );

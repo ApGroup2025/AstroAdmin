@@ -115,7 +115,7 @@ const handleSubmit = async (e) => {
     await createBlog(formData);
     setSuccessMessage("Blog created successfully!");
 
-    // Reset form
+  
     setTitle("");
     setSections([{ id: Date.now(), heading: "", content: "", video: [] }]);
     setQuestions([{ question: "", answer: "" }]);
@@ -127,8 +127,14 @@ const handleSubmit = async (e) => {
 };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-8 mt-6">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Create Blog</h2>
+    <div className="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-8 mt-6">
+  <h2
+  className="text-2xl font-bold mb-4 text-center"
+  style={{ color: "#006d4d" }}
+>
+  Create Blog
+</h2>
+
 
       {successMessage && (
         <p className="mb-4 text-green-600 font-medium">{successMessage}</p>
@@ -173,7 +179,7 @@ const handleSubmit = async (e) => {
                 required
               />
 
-              {/* Videos */}
+            
               <div className="space-y-2">
                 <h4 className="font-medium">Video URLs</h4>
                 {sec.video.map((url, i) => (
@@ -256,7 +262,7 @@ const handleSubmit = async (e) => {
           </button>
         </div>
 
-        {/* Images */}
+    
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
             Upload Images
@@ -270,7 +276,6 @@ const handleSubmit = async (e) => {
           />
         </div>
 
-        {/* Submit */}
         <div>
           <button
             type="submit"

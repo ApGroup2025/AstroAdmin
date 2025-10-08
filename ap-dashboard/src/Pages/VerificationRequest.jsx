@@ -1,69 +1,5 @@
 
 
-// import React, { useEffect, useState } from "react";
-// import { getAllVerificationRequests } from "../constants/api";
-
-// export default function VerificationRequests() {
-//   const [requests, setRequests] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const fetchRequests = async () => {
-//       try {
-//         const response = await getAllVerificationRequests();
-//         console.log("Verification API Response:", response);
-//         setRequests(response.data || []);
-//       } catch (err) {
-//         setError("Failed to load verification requests");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchRequests();
-//   }, []);
-
-//   if (loading) return <p>Loading...</p>;
-//   if (error) return <p className="text-red-600">{error}</p>;
-
-//   return (
-//     <div className="p-6">
-//       <h1 className="text-xl font-bold mb-4">Verification Requests</h1>
-
-//       {requests.length === 0 ? (
-//         <p>No verification requests found.</p>
-//       ) : (
-//         <>
-//        {requests.map((request) => (
-//   <li key={request._id} className="p-4 border rounded">
-//       <div className="mt-2">
-//       <strong>Profile:</strong>{" "}
-//       {request.astrologerId?.profilePic ? (
-//         <img
-//           src={request.astrologerId.profilePic}
-//           alt="Profile"
-//           className="w-16 h-16 rounded-full border object-cover"
-//         />
-//       ) : (
-//         "N/A"
-//       )}
-//     </div>
-//     <p><strong>Name:</strong> {request.astrologerId?.fullName || "N/A"}</p>
-//     <p><strong>Email:</strong> {request.astrologerId?.email || "N/A"}</p>
-//     <p><strong>Phone:</strong> {request.astrologerId?.phone || "N/A"}</p>
-//     <p><strong>Status:</strong> {request.verificationStatus || "N/A"}</p>
-    
-  
-//   </li>
-// ))}
-
-//         </>
-//       )}
-//     </div>
-//   );
-// }
-
 
 import React, { useEffect, useState } from "react";
 import {
@@ -209,9 +145,9 @@ export default function VerificationRequests() {
             </p>
           </div>
 
-          {/* Filters */}
+         
           <div className="flex bg-gray-100 rounded-lg p-1">
-            {["all", "pending", "approved", "rejected"].map((status) => (
+            {[ "pending", "approved", "rejected","all",].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilter(status)}

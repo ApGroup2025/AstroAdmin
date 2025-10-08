@@ -314,29 +314,15 @@ export const rejectVerification = async ({ id, notes }) => {
   return res.data;
 };
 
-export const approveOrRejectKYC = async (id, status, remarks = "") => {
-  try {
-    const token = localStorage.getItem("auth");
 
-    const res = await axios.patch(
-      `${BASE_URL}/admin/kyc/approve-or-reject`,
-      { id, status, remarks },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
 
-    return res.data;
-  } catch (error) {
-    console.error("KYC API Error:", error.response?.data || error.message);
-    throw error;
-  }
-};
+
+
 export const deleteBlog = async (id) => {
   try {
     const token = localStorage.getItem("auth"); 
-    console.log("🟢 Using token:", token);
-    console.log("🟢 Deleting blog ID:", id);
+    console.log(" Using token:", token);
+    console.log(" Deleting blog ID:", id);
 
     const response = await axios.delete(`${BASE_URL}/blogs/${id}`, {
       headers: {
@@ -364,4 +350,130 @@ export const createBlog = async (formData) => {
   } catch (err) {
     throw err.response?.data || { message: err.message };
   }
+};
+
+
+
+
+
+
+export const fetchNotices = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/admin/notice`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching notices:", error);
+    throw error;
+  }
+};
+
+
+
+export const createNotice = async (formData) => {
+  const token = localStorage.getItem("auth"); 
+
+  const res = await axios.post(`${BASE_URL}/admin/notice/create`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Authorization": `Bearer ${token}`, 
+    },
+  });
+
+  return res.data;
+};
+
+export const deleteNotice = async (id) => {
+  const token = localStorage.getItem("auth"); 
+
+  const res = await axios.delete(`${BASE_URL}/admin/notices/delete/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+export const fetchAllTickets = async () => {
+  try {
+    const token = localStorage.getItem("auth");
+    if (!token) throw new Error("Unauthorized: No token found");
+
+    const res = await axios.get(`${BASE_URL}/admin/tickets/all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data; 
+  } catch (err) {
+    console.error("Error fetching tickets:", err);
+    throw err.response?.data || { message: "Server error" };
+  }
+};
+
+export const updateTicketStatus = async (ticketId, status) => {
+  const res = await axios.put(
+    `${BASE_URL}/admin/ticket/${ticketId}/status`,
+    { status },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("auth")}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const deletePoojaById = async (id) => {
+  const token = localStorage.getItem("auth"); 
+  if (!token) throw new Error("No admin token found");
+
+  const res = await axios.delete(`${BASE_URL}/admin/delete-pooja/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+export const createNotification = async (data) => {
+  const token = localStorage.getItem("auth");
+
+  if (!token) {
+    throw new Error("No admin token found. Please login first.");
+  }
+
+  const res = await axios.post(`${BASE_URL}/admin/notifications/create`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+
+
+export const approveOrRejectKYC = async (id, status, remarks) => {
+  const token = localStorage.getItem("auth");
+
+  if (!token) throw new Error("Admin not logged in");
+
+  const res = await axios.patch(
+    `${BASE_URL}/admin/kyc/approve-or-reject`,
+    {
+      id,
+      status,
+      remarks,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.data;
 };
