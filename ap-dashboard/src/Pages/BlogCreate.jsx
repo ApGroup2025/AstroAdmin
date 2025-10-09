@@ -4,6 +4,8 @@ import { createBlog } from "../constants/api";
 
 const BlogCreate = () => {
   const [title, setTitle] = useState("");
+  const [meta, setMeta] = useState("");
+  const [author, setAuthor] = useState("");
   const [sections, setSections] = useState([
     { id: Date.now(), heading: "", content: "", video: [] },
   ]);
@@ -11,30 +13,19 @@ const BlogCreate = () => {
   const [images, setImages] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
 
-
+  
   const handleSectionChange = (id, field, value) => {
     setSections((prev) =>
       prev.map((sec) => (sec.id === id ? { ...sec, [field]: value } : sec))
     );
   };
 
-  const handleVideoChange = (id, index, value) => {
+ 
+  const handleVideoFileChange = (id, e) => {
+    const files = Array.from(e.target.files);
     setSections((prev) =>
       prev.map((sec) =>
-        sec.id === id
-          ? {
-              ...sec,
-              video: sec.video.map((v, i) => (i === index ? value : v)),
-            }
-          : sec
-      )
-    );
-  };
-
-  const addVideoToSection = (id) => {
-    setSections((prev) =>
-      prev.map((sec) =>
-        sec.id === id ? { ...sec, video: [...sec.video, ""] } : sec
+        sec.id === id ? { ...sec, video: [...sec.video, ...files] } : sec
       )
     );
   };
@@ -50,7 +41,6 @@ const BlogCreate = () => {
     setSections(sections.filter((sec) => sec.id !== id));
   };
 
-  
   const handleQuestionChange = (index, field, value) => {
     const newQuestions = [...questions];
     newQuestions[index][field] = value;
@@ -65,83 +55,85 @@ const BlogCreate = () => {
     setQuestions(questions.filter((_, i) => i !== index));
   };
 
-
   const handleImageChange = (e) => {
     setImages(Array.from(e.target.files));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("title", title);
-
-  
-  const subTitles = sections.map((sec) => sec.heading || "");
-  formData.append("subTitles", JSON.stringify(subTitles));
-
-  
-  const content = sections.map((sec) => sec.content || "").join("\n\n");
-  formData.append("content", content);
-
-  
-  const fullSections = sections.map((sec) => ({
-    heading: sec.heading || "",
-    content: sec.content || "",
-    video: sec.video || [],
-  }));
-  formData.append("sections", JSON.stringify(fullSections)); 
+    const formData = new FormData();
 
 
-  const parsedQuestions = questions.map((q) => ({
-    question: q.question || "",
-    answer: q.answer || "",
-  }));
-  formData.append("questions", JSON.stringify(parsedQuestions));
+formData.append(
+  "slugUrl",
+  title
+    .toLowerCase()
+    .trim()
+    .replace(/[:,'"&]/g, "") 
+    .replace(/\s+/g, "-")  
+    .replace(/-+/g, "-")    
+);
 
+    formData.append("title", title);
+    formData.append("meta", meta || title);
+    formData.append("author", author || "Admin");
+    formData.append("date", new Date().toISOString());
 
-  images.forEach((img) => formData.append("images", img));
+   
+    const fullSections = sections.map((sec) => ({
+      id: sec.id,
+      heading: sec.heading,
+      content: sec.content,
+    }));
+    formData.append("sections", JSON.stringify(fullSections));
 
-  console.log({
-    title,
-    subTitles,
-    content,
-    fullSections,
-    parsedQuestions,
-    images,
-  });
+    sections.forEach((sec) => {
+      if (sec.video && sec.video.length > 0) {
+        sec.video.forEach((file) => {
+          formData.append(`videos_${sec.id}`, file);
+        });
+      }
+    });
 
-  try {
-    await createBlog(formData);
-    setSuccessMessage("Blog created successfully!");
+ 
+    const parsedQuestions = questions.map((q) => ({
+      question: q.question,
+      answer: q.answer,
+    }));
+    formData.append("questions", JSON.stringify(parsedQuestions));
 
-  
-    setTitle("");
-    setSections([{ id: Date.now(), heading: "", content: "", video: [] }]);
-    setQuestions([{ question: "", answer: "" }]);
-    setImages([]);
-  } catch (err) {
-    alert("Error creating blog: " + (err.response?.data?.message || err.message));
-    console.error(err);
-  }
-};
+   
+    images.forEach((img) => formData.append("images", img));
+
+    try {
+      await createBlog(formData);
+      setSuccessMessage(" Blog created successfully!");
+      // reset form
+      setTitle("");
+      setMeta("");
+      setAuthor("");
+      setSections([{ id: Date.now(), heading: "", content: "", video: [] }]);
+      setQuestions([{ question: "", answer: "" }]);
+      setImages([]);
+    } catch (err) {
+      alert("Error creating blog: " + (err.message || "Unknown error"));
+      console.error(err);
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-8 mt-6">
-  <h2
-  className="text-2xl font-bold mb-4 text-center"
-  style={{ color: "#006d4d" }}
->
-  Create Blog
-</h2>
-
+      <h2 className="text-2xl font-bold mb-4 text-center" style={{ color: "#006d4d" }}>
+        Create Blog
+      </h2>
 
       {successMessage && (
         <p className="mb-4 text-green-600 font-medium">{successMessage}</p>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
- 
+        {/* Title */}
         <div>
           <label className="block font-semibold text-gray-700 mb-1">Title*</label>
           <input
@@ -153,7 +145,29 @@ const handleSubmit = async (e) => {
           />
         </div>
 
-        
+        {/* Meta */}
+        <div>
+          <label className="block font-semibold text-gray-700 mb-1">Meta Description</label>
+          <input
+            type="text"
+            className="w-full border rounded-md px-3 py-2"
+            value={meta}
+            onChange={(e) => setMeta(e.target.value)}
+          />
+        </div>
+
+        {/* Author */}
+        <div>
+          <label className="block font-semibold text-gray-700 mb-1">Author</label>
+          <input
+            type="text"
+            className="w-full border rounded-md px-3 py-2"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
+        </div>
+
+        {/* Sections */}
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-2">Sections</h3>
           {sections.map((sec) => (
@@ -162,45 +176,27 @@ const handleSubmit = async (e) => {
                 type="text"
                 placeholder="Heading"
                 value={sec.heading}
-                onChange={(e) =>
-                  handleSectionChange(sec.id, "heading", e.target.value)
-                }
+                onChange={(e) => handleSectionChange(sec.id, "heading", e.target.value)}
                 className="w-full border rounded-md px-3 py-2 mb-2"
                 required
               />
               <textarea
                 placeholder="Content"
                 value={sec.content}
-                onChange={(e) =>
-                  handleSectionChange(sec.id, "content", e.target.value)
-                }
+                onChange={(e) => handleSectionChange(sec.id, "content", e.target.value)}
                 className="w-full border rounded-md px-3 py-2 mb-2"
                 rows="4"
                 required
               />
 
-            
-              <div className="space-y-2">
-                <h4 className="font-medium">Video URLs</h4>
-                {sec.video.map((url, i) => (
-                  <input
-                    key={i}
-                    type="text"
-                    placeholder="Video URL"
-                    value={url}
-                    onChange={(e) =>
-                      handleVideoChange(sec.id, i, e.target.value)
-                    }
-                    className="w-full border rounded-md px-3 py-2"
-                  />
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addVideoToSection(sec.id)}
-                  className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md"
-                >
-                  + Add Video
-                </button>
+              <div>
+                <label className="block font-medium mb-1">Upload Videos (optional)</label>
+                <input
+                  type="file"
+                  accept="video/*"
+                  multiple
+                  onChange={(e) => handleVideoFileChange(sec.id, e)}
+                />
               </div>
 
               <button
@@ -230,18 +226,14 @@ const handleSubmit = async (e) => {
                 type="text"
                 placeholder="Question"
                 value={q.question}
-                onChange={(e) =>
-                  handleQuestionChange(i, "question", e.target.value)
-                }
+                onChange={(e) => handleQuestionChange(i, "question", e.target.value)}
                 className="flex-1 border rounded-md px-3 py-2"
               />
               <input
                 type="text"
                 placeholder="Answer"
                 value={q.answer}
-                onChange={(e) =>
-                  handleQuestionChange(i, "answer", e.target.value)
-                }
+                onChange={(e) => handleQuestionChange(i, "answer", e.target.value)}
                 className="flex-1 border rounded-md px-3 py-2"
               />
               <button
@@ -262,11 +254,9 @@ const handleSubmit = async (e) => {
           </button>
         </div>
 
-    
+        {/* Images */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Upload Images
-          </h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Upload Images</h3>
           <input
             type="file"
             multiple
@@ -276,6 +266,7 @@ const handleSubmit = async (e) => {
           />
         </div>
 
+        {/* Submit */}
         <div>
           <button
             type="submit"

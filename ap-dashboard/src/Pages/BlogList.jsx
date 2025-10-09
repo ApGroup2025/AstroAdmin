@@ -190,11 +190,11 @@ const handleDeleteConfirm = async () => {
 
                    
 
-                      {/* {blog.author && (
+                       {blog.author && (
                         <div className="flex items-center gap-2 mb-4">
                           <span className="font-medium">By {blog.author}</span>
                         </div>
-                      )} */}
+                      )} 
 
                       <div className="flex items-center justify-between">
                         <span
