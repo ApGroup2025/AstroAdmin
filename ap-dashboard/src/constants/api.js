@@ -477,3 +477,4 @@ export const approveOrRejectKYC = async (id, status, remarks) => {
 
   return res.data;
 };
+

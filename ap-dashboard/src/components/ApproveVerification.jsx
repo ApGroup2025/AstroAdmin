@@ -45,3 +45,4 @@ export default function VerificationList({ astrologers, refreshList }) {
     </div>
   );
 }
+

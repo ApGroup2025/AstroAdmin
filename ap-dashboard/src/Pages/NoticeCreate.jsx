@@ -87,3 +87,4 @@ const NoticeCreate = () => {
 };
 
 export default NoticeCreate;
+

@@ -93,3 +93,4 @@ const KYCAction = ({ astrologer }) => {
 
 export default KYCAction;
 
+

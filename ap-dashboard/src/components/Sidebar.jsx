@@ -4,7 +4,7 @@ import {
   MdApproval, MdAttachMoney, MdInventory, MdArticle,MdCreate,MdCloudUpload,MdNotifications,MdConfirmationNumber,MdChecklist
 } from "react-icons/md";
 import { GiCrystalBall ,GiPrayer} from "react-icons/gi";
-import logo from "../assets/logo.webp";
+import logo from "../assets/logo.png";
 import { FaBell, FaRupeeSign } from "react-icons/fa";
 
 const navItems = [

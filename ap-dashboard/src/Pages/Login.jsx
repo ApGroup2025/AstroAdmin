@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.webp";
+import logo from "../assets/logo.png";
 import { loginAdmin } from "../constants/api";
 
 export default function Login() {
@@ -82,3 +82,4 @@ export default function Login() {
     </div>
   );
 }
+
